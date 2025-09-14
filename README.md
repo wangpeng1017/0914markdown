@@ -19,6 +19,12 @@
 
 ## 支持的文件格式
 
+**轻量级版本 (Vercel部署)**:
+- 文本文件 (.txt)
+- HTML文件 (.html, .htm)
+- CSV文件 (.csv)
+
+**完整版本 (本地部署)**:
 - PDF文档
 - Microsoft Word (.docx)
 - Microsoft Excel (.xlsx)
@@ -27,6 +33,8 @@
 - HTML文件 (.html)
 - RTF文档 (.rtf)
 - 图片文件 (.jpg, .jpeg, .png)
+
+> **注意**: 由于Vercel serverless函数大小限制，在线版本使用轻量级转换器。如需完整功能支持，请本地部署并安装 `markitdown[all]`。
 
 ## 本地开发
 

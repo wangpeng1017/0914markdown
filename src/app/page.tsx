@@ -12,8 +12,8 @@ export default function Home() {
             Markdown Converter
           </h1>
           <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-            Convert any document to Markdown instantly. 
-            Support for PDF, Word, Excel, PowerPoint, and more.
+            Convert text documents to Markdown instantly. 
+            Lightweight version supporting TXT, HTML, and CSV files.
           </p>
         </div>
         

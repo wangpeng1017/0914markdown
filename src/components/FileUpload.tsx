@@ -57,7 +57,7 @@ export function FileUploadComponent() {
 
       const data = await response.json();
       setResult(data);
-    } catch (error) {
+    } catch {
       setResult({
         success: false,
         error: "Network error: Failed to upload file",
@@ -109,7 +109,7 @@ export function FileUploadComponent() {
             type="file"
             onChange={handleFileSelect}
             className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-            accept=".pdf,.docx,.xlsx,.pptx,.txt,.html,.rtf,.jpg,.jpeg,.png"
+            accept=".txt,.html,.htm,.csv"
             disabled={isLoading}
           />
           
@@ -137,7 +137,7 @@ export function FileUploadComponent() {
                 Drag and drop or click to select a file
               </p>
               <p className="text-sm text-gray-400 dark:text-gray-500">
-                Supports PDF, Word, Excel, PowerPoint, images, and more
+                Supports TXT, HTML, and CSV files (Lightweight version)
               </p>
             </>
           )}
