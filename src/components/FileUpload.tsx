@@ -136,9 +136,14 @@ export function FileUploadComponent() {
               <p className="text-gray-500 dark:text-gray-400 mb-4">
                 Drag and drop or click to select a file
               </p>
-              <p className="text-sm text-gray-400 dark:text-gray-500">
-                Supports TXT, HTML, and CSV files (Lightweight version)
-              </p>
+              <div className="text-sm text-center">
+                <p className="text-gray-400 dark:text-gray-500 mb-2">
+                  Supports TXT, HTML, and CSV files (Lightweight version)
+                </p>
+                <p className="text-red-500 dark:text-red-400 text-xs">
+                  ⚠️ Excel (.xlsx), Word (.docx), PDF files are not supported
+                </p>
+              </div>
             </>
           )}
         </div>

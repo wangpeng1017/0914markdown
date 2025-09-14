@@ -30,13 +30,42 @@ class LightweightConverter:
                 return self._convert_csv(file_path, filename)
                 
             else:
-                # For unsupported formats, try to read as text
+                # Check if it's a binary file that we don't support
+                binary_extensions = ['.pdf', '.docx', '.xlsx', '.pptx', '.jpg', '.jpeg', '.png', '.gif', '.zip', '.rar']
+                if ext in binary_extensions:
+                    return Result(f"# {filename}\n\n## 文件格式不支持\n\n抱歉，当前轻量级版本不支持 **{ext.upper()}** 格式的文件。\n\n### 支持的格式：\n- 文本文件 (.txt)\n- HTML文件 (.html, .htm)\n- CSV文件 (.csv)\n\n### 如需完整支持：\n如需转换PDF、Word、Excel、PowerPoint等格式，请使用本地部署版本并安装完整的markitdown库。\n\n---\n*注意：Excel、Word等Office文件是二进制格式，需要专门的库来解析，不能简单作为文本文件读取。*")
+                
+                # For other formats, try to read as text but with better error handling
                 try:
-                    with open(file_path, 'r', encoding='utf-8', errors='ignore') as f:
-                        content = f.read()[:5000]  # Limit to first 5000 chars
-                        return Result(f"# {filename}\n\n```\n{content}\n```\n\n*Note: This file format is not fully supported in the lightweight version. For full support of PDF, Word, Excel, and PowerPoint files, please use a local installation with the full markitdown library.*")
-                except:
-                    return Result(f"# {filename}\n\n*This file format is not supported in the lightweight version. For full support of PDF, Word, Excel, and PowerPoint files, please use a local installation with the full markitdown library.*")
+                    # Try to detect if it's a text file
+                    with open(file_path, 'rb') as f:
+                        sample = f.read(1024)
+                    
+                    # Check if it's likely a text file (no null bytes in first 1KB)
+                    if b'\x00' in sample:
+                        return Result(f"# {filename}\n\n## 二进制文件检测\n\n检测到这是一个二进制文件，无法作为文本处理。\n\n**文件扩展名**: {ext}\n\n请使用支持的格式：TXT、HTML或CSV文件。")
+                    
+                    # Try to read as text with multiple encoding attempts
+                    encodings = ['utf-8', 'gbk', 'gb2312', 'utf-16', 'latin1']
+                    content = None
+                    used_encoding = None
+                    
+                    for encoding in encodings:
+                        try:
+                            with open(file_path, 'r', encoding=encoding, errors='strict') as f:
+                                content = f.read()[:5000]  # Limit to first 5000 chars
+                                used_encoding = encoding
+                                break
+                        except UnicodeDecodeError:
+                            continue
+                    
+                    if content is not None:
+                        return Result(f"# {filename}\n\n*检测编码: {used_encoding}*\n\n```\n{content}\n```\n\n---\n*注意：此文件被当作文本处理，可能不是最佳转换方式。*")
+                    else:
+                        return Result(f"# {filename}\n\n## 编码错误\n\n无法使用常见编码方式读取此文件。\n\n尝试的编码：{', '.join(encodings)}\n\n请确保文件是有效的文本格式。")
+                        
+                except Exception as e:
+                    return Result(f"# {filename}\n\n## 读取错误\n\n处理文件时发生错误：{str(e)}\n\n请检查文件是否损坏或格式是否受支持。")
                     
         except Exception as e:
             return Result(f"# Conversion Error\n\nFailed to convert {filename}: {str(e)}")
