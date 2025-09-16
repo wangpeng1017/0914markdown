@@ -109,7 +109,7 @@ export function FileUploadComponent() {
             type="file"
             onChange={handleFileSelect}
             className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-            accept=".txt,.html,.htm,.csv"
+            accept=".txt,.html,.htm,.csv,.pdf,.docx,.xlsx,.pptx"
             disabled={isLoading}
           />
           
@@ -138,10 +138,10 @@ export function FileUploadComponent() {
               </p>
               <div className="text-sm text-center">
                 <p className="text-gray-400 dark:text-gray-500 mb-2">
-                  Supports TXT, HTML, and CSV files (Lightweight version)
+                  Supports TXT, HTML, CSV, PDF, Word, Excel, PowerPoint files
                 </p>
-                <p className="text-red-500 dark:text-red-400 text-xs">
-                  ⚠️ Excel (.xlsx), Word (.docx), PDF files are not supported
+                <p className="text-blue-500 dark:text-blue-400 text-xs">
+                  ✨ Enhanced version - PDF, Word, Excel now supported!
                 </p>
               </div>
             </>

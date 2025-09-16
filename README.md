@@ -1,15 +1,16 @@
 # Markdown Converter
 
-一个极简的文档转Markdown工具，基于Microsoft MarkItDown库构建。
+一个功能强大的文档转Markdown工具，基于Microsoft MarkItDown库构建。
 
 ## 功能特点
 
 - 🚀 **极简设计** - 拖拽上传，一键转换
-- 📄 **多格式支持** - PDF、Word、Excel、PowerPoint、图片等
+- 📄 **全格式支持** - PDF、Word、Excel、PowerPoint、HTML、CSV、TXT
 - ⚡ **即时预览** - 转换完成后立即预览Markdown内容
 - 💾 **一键下载** - 支持直接下载转换后的.md文件
+- 🔄 **智能回退** - 完整版不可用时自动回退到轻量级模式
 - 🌙 **暗黑模式** - 自适应明暗主题
-- ☁️ **云端部署** - 基于Vercel的无服务器架构
+- ☁️ **灵活部署** - 支持Vercel、本地或其他云平台
 
 ## 技术栈
 
@@ -19,22 +20,21 @@
 
 ## 支持的文件格式
 
-**轻量级版本 (Vercel部署)**:
-- 文本文件 (.txt)
-- HTML文件 (.html, .htm)
-- CSV文件 (.csv)
+**完整版本 (推荐)**:
+- 📄 PDF文档 (.pdf)
+- 📄 Microsoft Word (.docx)
+- 📊 Microsoft Excel (.xlsx)
+- 📊 Microsoft PowerPoint (.pptx)
+- 📄 HTML文件 (.html, .htm)
+- 📄 文本文件 (.txt)
+- 📋 CSV文件 (.csv)
 
-**完整版本 (本地部署)**:
-- PDF文档
-- Microsoft Word (.docx)
-- Microsoft Excel (.xlsx)
-- Microsoft PowerPoint (.pptx)
-- 文本文件 (.txt)
-- HTML文件 (.html)
-- RTF文档 (.rtf)
-- 图片文件 (.jpg, .jpeg, .png)
+**轻量级回退模式**:
+- 文本文件 (.txt) - 多编码支持
+- HTML文件 (.html, .htm) - 基本标签转换
+- CSV文件 (.csv) - 表格格式转换
 
-> **注意**: 由于Vercel serverless函数大小限制，在线版本使用轻量级转换器。如需完整功能支持，请本地部署并安装 `markitdown[all]`。
+> **智能适配**: 系统优先使用完整版markitdown库，如遇到环境限制或错误时自动回退到轻量级模式，确保基础功能始终可用。
 
 ## 本地开发
 
@@ -61,13 +61,33 @@ npm run dev
 
 应用将在 [http://localhost:3000](http://localhost:3000) 启动。
 
-## 部署到Vercel
+## 部署选项
+
+### Vercel部署
 
 1. 将代码推送到GitHub仓库
 2. 在Vercel中导入项目
 3. 自动部署完成
 
 Vercel会自动识别Next.js项目和Python API路由。
+
+> **注意**: Vercel serverless函数有大小限制，如果`markitdown[all]`及其依赖超过限制，系统会自动使用轻量级模式。
+
+### 本地部署 (推荐完整功能)
+
+如需完整PDF、Office文档支持，建议本地部署：
+
+```bash
+# 安装完整依赖（包括二进制库）
+pip install markitdown[all]
+
+# 启动应用
+npm run dev
+```
+
+### 其他云平台
+
+可部署到任何支持Next.js和Python的云平台，如Railway、Render、DigitalOcean等。
 
 ## 使用方法
 
