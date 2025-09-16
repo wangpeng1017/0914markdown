@@ -1,1 +1,12 @@
-{}
+{
+  "functions": {
+    "api/**": {
+      "excludeFiles": "**/{__pycache__,*.pyc,*.pyo,*.pyd,test*,*.test.*,*.spec.*,docs,examples}/**"
+    }
+  },
+  "build": {
+    "env": {
+      "PYTHONDONTWRITEBYTECODE": "1"
+    }
+  }
+}

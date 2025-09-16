@@ -13,7 +13,7 @@ export default function Home() {
           </h1>
           <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
             Convert documents to Markdown instantly. 
-            Enhanced version supporting PDF, Word, Excel, PowerPoint, TXT, HTML, and CSV files.
+            Optimized version supporting PDF, Word (.docx), Excel (.xlsx), TXT, HTML, and CSV files.
           </p>
         </div>
         

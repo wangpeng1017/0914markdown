@@ -6,17 +6,18 @@ import re
 from urllib.parse import unquote
 import base64
 
-# Try to import the full markitdown library first, fallback to lightweight version
+# Try to import markitdown with minimal dependencies
 try:
     from markitdown import MarkItDown
-    FULL_MARKITDOWN_AVAILABLE = True
+    MARKITDOWN_AVAILABLE = True
 except ImportError:
-    FULL_MARKITDOWN_AVAILABLE = False
+    MARKITDOWN_AVAILABLE = False
+    print("MarkItDown not available, using fallback mode")
 
-# Enhanced document converter with fallback support
-class EnhancedConverter:
+# Optimized document converter for Vercel deployment
+class OptimizedConverter:
     def convert(self, file_path, filename):
-        """Convert file to markdown using full markitdown library or fallback to lightweight version"""
+        """Convert file to markdown with optimized dependencies"""
         class Result:
             def __init__(self, text):
                 self.text_content = text
@@ -25,25 +26,29 @@ class EnhancedConverter:
             # Get file extension
             _, ext = os.path.splitext(filename.lower())
             
-            # Try full markitdown first if available
-            if FULL_MARKITDOWN_AVAILABLE:
+            # Try markitdown first if available
+            if MARKITDOWN_AVAILABLE:
                 try:
-                    markitdown = MarkItDown()
-                    result = markitdown.convert(file_path)
-                    
-                    # Add filename as title if not already present
-                    content = result.text_content
-                    if not content.startswith('#'):
-                        content = f"# {filename}\n\n{content}"
-                    
-                    return Result(content)
-                    
+                    # Use markitdown for supported formats
+                    if ext in ['.pdf', '.docx', '.xlsx']:
+                        markitdown = MarkItDown()
+                        result = markitdown.convert(file_path)
+                        
+                        # Add filename as title if not already present
+                        content = result.text_content
+                        if not content.startswith('#'):
+                            content = f"# {filename}\n\n{content}"
+                        
+                        return Result(content)
+                    else:
+                        # Use fallback for other formats
+                        return self._fallback_convert(file_path, filename, ext)
+                        
                 except Exception as e:
-                    # If full markitdown fails, try fallback for supported formats
-                    print(f"Full MarkItDown failed for {filename}: {str(e)}")
+                    print(f"MarkItDown failed for {filename}: {str(e)}")
                     return self._fallback_convert(file_path, filename, ext)
             else:
-                # Use lightweight fallback
+                # Use fallback mode
                 return self._fallback_convert(file_path, filename, ext)
                     
         except Exception as e:
@@ -63,9 +68,9 @@ class EnhancedConverter:
             return self._convert_csv(file_path, filename)
         else:
             # For unsupported formats in fallback mode
-            supported_by_full = ['.pdf', '.docx', '.xlsx', '.pptx']
-            if ext in supported_by_full:
-                return Result(f"# {filename}\n\n## 完整版库不可用\n\n此文件格式 **{ext.upper()}** 需要完整版markitdown库支持。\n\n### 当前状态\n- 完整版markitdown: {'✅ 可用' if FULL_MARKITDOWN_AVAILABLE else '❌ 不可用'}\n- 文件格式: {ext.upper()}\n\n### 解决方案\n1. **本地部署**: 确保安装了 `markitdown[all]` 及其所有依赖\n2. **依赖检查**: 验证PDF处理、Office文档处理库是否正确安装\n3. **重新部署**: 在完整环境中重新部署应用\n\n### 错误详情\n如果您确信环境配置正确，请检查服务器日志以获取详细错误信息。")
+            supported_formats = ['.pdf', '.docx', '.xlsx']
+            if ext in supported_formats:
+                return Result(f"# {filename}\n\n## 转换失败\n\n此文件格式 **{ext.upper()}** 需要markitdown库支持，但当前不可用。\n\n### 支持的格式\n- PDF文档 (.pdf)\n- Word文档 (.docx)\n- Excel文件 (.xlsx)\n- HTML文件 (.html)\n- 文本文件 (.txt)\n- CSV文件 (.csv)\n\n### 当前状态\nMarkItDown库: {'✅ 可用' if MARKITDOWN_AVAILABLE else '❌ 不可用'}")
             else:
                 return self._convert_unknown(file_path, filename, ext)
     
@@ -104,7 +109,7 @@ class EnhancedConverter:
             
             # Check if it's likely a text file (no null bytes in first 1KB)
             if b'\x00' in sample:
-                return Result(f"# {filename}\n\n## 二进制文件\n\n检测到这是一个二进制文件 ({ext.upper()})，无法作为文本处理。\n\n### 支持的格式\n**完整版本**：PDF, Word (.docx), Excel (.xlsx), PowerPoint (.pptx), 图片文件\n**轻量级版本**：TXT, HTML, CSV\n\n### 当前状态\n完整版markitdown: {'✅ 可用' if FULL_MARKITDOWN_AVAILABLE else '❌ 不可用'}")
+                return Result(f"# {filename}\n\n## 二进制文件\n\n检测到这是一个二进制文件 ({ext.upper()})，无法作为文本处理。\n\n### 支持的格式\n- PDF文档 (.pdf)\n- Word文档 (.docx)\n- Excel文件 (.xlsx)\n- HTML文件 (.html, .htm)\n- 文本文件 (.txt)\n- CSV文件 (.csv)\n\n### 当前状态\nMarkItDown库: {'✅ 可用' if MARKITDOWN_AVAILABLE else '❌ 不可用'}")
             
             # Try to read as text with multiple encoding attempts
             encodings = ['utf-8', 'gbk', 'gb2312', 'utf-16', 'latin1']
@@ -271,8 +276,8 @@ class handler(BaseHTTPRequestHandler):
                 temp_path = temp_file.name
 
             try:
-                # Convert file using enhanced converter
-                converter = EnhancedConverter()
+                # Convert file using optimized converter
+                converter = OptimizedConverter()
                 result = converter.convert(temp_path, filename)
                 markdown_content = result.text_content
                 

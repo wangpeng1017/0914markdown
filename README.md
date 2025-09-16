@@ -1,16 +1,16 @@
 # Markdown Converter
 
-一个功能强大的文档转Markdown工具，基于Microsoft MarkItDown库构建。
+一个高效的文档转Markdown工具，针对Vercel部署进行优化。
 
 ## 功能特点
 
 - 🚀 **极简设计** - 拖拽上传，一键转换
-- 📄 **全格式支持** - PDF、Word、Excel、PowerPoint、HTML、CSV、TXT
+- 📄 **核心格式支持** - PDF、Word (.docx)、Excel (.xlsx)、HTML、CSV、TXT
 - ⚡ **即时预览** - 转换完成后立即预览Markdown内容
 - 💾 **一键下载** - 支持直接下载转换后的.md文件
-- 🔄 **智能回退** - 完整版不可用时自动回退到轻量级模式
 - 🌙 **暗黑模式** - 自适应明暗主题
-- ☁️ **灵活部署** - 支持Vercel、本地或其他云平台
+- ☁️ **Vercel优化** - 专为云部署优化，符合250MB限制
+- 🔄 **智能回退** - 自动处理不支持的格式
 
 ## 技术栈
 
@@ -20,21 +20,20 @@
 
 ## 支持的文件格式
 
-**完整版本 (推荐)**:
-- 📄 PDF文档 (.pdf)
-- 📄 Microsoft Word (.docx)
-- 📊 Microsoft Excel (.xlsx)
-- 📊 Microsoft PowerPoint (.pptx)
-- 📄 HTML文件 (.html, .htm)
-- 📄 文本文件 (.txt)
-- 📋 CSV文件 (.csv)
+**优化版本 (Vercel部署)**:
+- 📄 PDF文档 (.pdf) - 使用markitdown库
+- 📄 Microsoft Word (.docx) - Office文档支持
+- 📊 Microsoft Excel (.xlsx) - 电子表格转换
+- 📄 HTML文件 (.html, .htm) - 基本标签转换
+- 📄 文本文件 (.txt) - 多编码支持
+- 📋 CSV文件 (.csv) - 表格格式转换
 
-**轻量级回退模式**:
-- 文本文件 (.txt) - 多编码支持
-- HTML文件 (.html, .htm) - 基本标签转换
-- CSV文件 (.csv) - 表格格式转换
+**不支持的格式** (为减小函数大小):
+- PowerPoint (.pptx) - 超过Vercel限制
+- 图片文件 (.jpg, .png) - 需要额外依赖
+- 音频文件 - 需要额外依赖
 
-> **智能适配**: 系统优先使用完整版markitdown库，如遇到环境限制或错误时自动回退到轻量级模式，确保基础功能始终可用。
+> **优化说明**: 为了符合Vercel 250MB函数大小限制，我们精简了依赖，保留了最重要的PDF、Word、Excel支持。
 
 ## 本地开发
 

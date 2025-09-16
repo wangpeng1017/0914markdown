@@ -1,1 +1,17 @@
-markitdown[all]
+# 核心markitdown库
+markitdown
+
+# PDF处理
+pdfminer-six
+
+# Word文档处理
+python-docx
+
+# Excel处理
+openpyxl
+
+# HTML处理
+beautifulsoup4
+
+# 基础依赖
+requests
